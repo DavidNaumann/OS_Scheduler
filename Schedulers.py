@@ -4,7 +4,7 @@ from Process import Process
 
 class ProcessorInformation:
     def __init__(self):
-        self.ready = deque()
+        self.ready = []
         self.time_next_schedule = -1
         self.currProcess = -1
 
@@ -27,7 +27,7 @@ def RoundRobin(currTime, procList, timeQuantum):
             if not procList[proc_info.ready[0]].isDone:
                 proc_info.ready.append(proc_info.ready[0])
 
-            proc_info.ready.popleft()
+            proc_info.ready.pop(0)
             proc_info.time_next_schedule = timeQuantum
 
         idx = proc_info.ready[0]
@@ -44,22 +44,78 @@ def ShortestProcessNext(currTime, procList):
     shortestTime = -1
 
     for i in range(len(procList)):
-        if procList[i].startTime == currTime:
-            proc_info.ready.append(i)
+        if isinstance(procList[i], Process):
+            if procList[i].startTime == currTime:
+                proc_info.ready.append(i)
 
     if proc_info.currProcess != -1:
+        cpuAvailable = False
         if procList[proc_info.currProcess].isDone:
-            cpuAvailable = False
             proc_info.currProcess = -1
+            cpuAvailable = True
 
-    return 0
+    if cpuAvailable:
+        if len(proc_info.ready) > 0:
+            proc_info.currProcess = -1
+            for i in range(len(proc_info.ready)):
+                if procList[proc_info.ready[i]].totalTimeNeeded < shortestTime or shortestTime == -1:
+                    if not procList[proc_info.ready[i]].isDone:
+                        proc_info.currProcess = proc_info.ready[i]
+                        shortestTime = procList[proc_info.currProcess].totalTimeNeeded
+
+    print(proc_info.currProcess)
+    return proc_info.currProcess
 
 
 def ShortestRemainingTime(currTime, procList):
-    # TODO: complete Shortest Remaining Time (SRT) function handling
-    return 0
+    shortestTime = -1
+
+    for i in range(len(procList)):
+        if isinstance(procList[i], Process):
+            if procList[i].startTime == currTime:
+                proc_info.ready.append(i)
+
+    if len(proc_info.ready) > 0:
+        proc_info.currProcess = -1
+        for i in range(len(proc_info.ready)):
+            time_left = procList[proc_info.ready[i]].totalTimeNeeded - procList[proc_info.ready[i]].timeScheduled
+            if time_left < shortestTime or shortestTime == -1:
+                if not procList[proc_info.ready[i]].isDone:
+                    proc_info.currProcess = proc_info.ready[i]
+                    shortestTime = procList[proc_info.currProcess].totalTimeNeeded
+
+    print(proc_info.currProcess)
+    return proc_info.currProcess
 
 
 def HighestResponseTime(currTime, procList):
-    # TODO: complete Highest Response Time (SPN) function handling
-    return 0
+    cpuAvailable = True
+    biggestHRRN_priority = -1
+
+    for i in range(len(procList)):
+        if isinstance(procList[i], Process):
+            if procList[i].startTime == currTime:
+                proc_info.ready.append(i)
+
+    if proc_info.currProcess != -1:
+        cpuAvailable = False
+        if procList[proc_info.currProcess].isDone:
+            proc_info.currProcess = -1
+            cpuAvailable = True
+
+    if cpuAvailable:
+        if len(proc_info.ready) > 0:
+            proc_info.currProcess = -1
+            firstRun = True
+            for i in range(len(proc_info.ready)):
+                burst_time = procList[proc_info.ready[i]].totalTimeNeeded
+                waiting_time = currTime - procList[proc_info.ready[i]].startTime
+                HRRN_priority = (waiting_time + burst_time)/burst_time
+                if HRRN_priority > biggestHRRN_priority or firstRun:
+                    if not procList[proc_info.ready[i]].isDone:
+                        proc_info.currProcess = proc_info.ready[i]
+                        biggestHRRN_priority = HRRN_priority
+                        firstRun = False
+
+    print(proc_info.currProcess)
+    return proc_info.currProcess

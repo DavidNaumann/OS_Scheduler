@@ -5,7 +5,7 @@ from GraphHandling import GraphHandler, GifHandler
 
 if __name__ == '__main__':
     # Process Handling Variables
-    schedChoice = 1
+    schedChoice = 3
 
     # pre-run init
     done = False
@@ -15,7 +15,7 @@ if __name__ == '__main__':
 
     # Input name and output name
     input_file_name = "Samples/sample_proc_list.txt"
-    output_file_name = "Samples/sample_proc_output.gif"
+    output_file_name = "Samples/sample_SRT_output.gif"
 
     proc_list = ProcListFromFile(input_file_name)
 
@@ -48,4 +48,4 @@ if __name__ == '__main__':
         if not done:
             curr_time += 1
 
-GifHandler(output_file_name, False)
+GifHandler(output_file_name, True)
