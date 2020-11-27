@@ -13,7 +13,9 @@ if __name__ == '__main__':
     proc_idx = -1
     timeQuantum = 1
 
+    # Input name and output name
     input_file_name = "Samples/sample_proc_list.txt"
+    output_file_name = "Samples/sample_proc_output.gif"
 
     proc_list = ProcListFromFile(input_file_name)
 
@@ -27,7 +29,7 @@ if __name__ == '__main__':
         elif schedChoice == 4:
             proc_idx = HighestResponseTime(curr_time, proc_list)
 
-        if proc_idx >= 0 and proc_idx < len(proc_list):
+        if 0 <= proc_idx < len(proc_list):
             curr_proc = proc_list[proc_idx]
             if isinstance(curr_proc, Process):
                 curr_proc.timeScheduled += 1
@@ -46,4 +48,4 @@ if __name__ == '__main__':
         if not done:
             curr_time += 1
 
-GifHandler("Samples/sample_proc.gif", False)
+GifHandler(output_file_name, False)
