@@ -38,6 +38,7 @@ if __name__ == '__main__':
                     curr_proc.timeFinished = curr_time
                 proc_list[proc_idx] = curr_proc
 
+        # Sends processes to be made into a graph/frame
         GraphHandler(proc_list, curr_time, proc_idx)
 
         done = True
@@ -48,4 +49,5 @@ if __name__ == '__main__':
         if not done:
             curr_time += 1
 
+# Uses all frames generated above to make a gif (True means to keep the picture log, false means to get rid of picture log)
 GifHandler(output_file_name, True)
